@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { Loader2Icon, PlusIcon } from "lucide-react"
+import { toast } from "sonner"
 
 import {
   createDepartmentAction,
@@ -49,11 +50,13 @@ export function CreateDepartmentDialog({
   const [isPending, startTransition] = useTransition()
 
   function handleSubmit(formData: FormData) {
+    const name = String(formData.get("name") ?? "").trim()
     startTransition(async () => {
       const result = await createDepartmentAction(state, formData)
       setState(result)
       if (!result.error && !result.fieldErrors) {
         setOpen(false)
+        toast.success(`"${name}" department created`)
       }
     })
   }

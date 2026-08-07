@@ -34,6 +34,9 @@ export function DepartmentMemberMenu({
     startTransition(async () => {
       try {
         await setDepartmentMemberRoleAction(teamId, userId, nextRole)
+        toast.success(
+          nextRole === "admin" ? "Made department admin" : "Removed as admin"
+        )
       } catch {
         toast.error("Couldn't update that member's role.")
       }
@@ -45,6 +48,7 @@ export function DepartmentMemberMenu({
     startTransition(async () => {
       try {
         await removeDepartmentMemberAction(teamId, userId)
+        toast.success("Removed from department")
       } catch {
         toast.error("Couldn't remove that member.")
       }
