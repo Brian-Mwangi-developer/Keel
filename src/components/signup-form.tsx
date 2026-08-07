@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react"
 import { EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react"
 
-import { loginAction, type LoginFormState } from "@/lib/actions/login"
+import { signupAction, type SignupFormState } from "@/lib/actions/signup"
 import { Logo } from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,23 +15,36 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 
-const initialState: LoginFormState = {}
+const initialState: SignupFormState = {}
 
-export function LoginForm() {
-  const [state, formAction, isPending] = useActionState(loginAction, initialState)
+export function SignupForm() {
+  const [state, formAction, isPending] = useActionState(signupAction, initialState)
   const [showPassword, setShowPassword] = useState(false)
 
   return (
     <form action={formAction} className="flex w-full max-w-sm flex-col gap-8">
       <div className="flex flex-col gap-2">
         <Logo className="text-2xl" />
-        <h1 className="text-xl font-semibold tracking-tight">Sign in</h1>
+        <h1 className="text-xl font-semibold tracking-tight">Create your account</h1>
         <p className="text-sm text-muted-foreground">
-          Welcome back. Enter your credentials to access your organization.
+          Join your team&apos;s organization on Keel.
         </p>
       </div>
 
       <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="name">Your name</FieldLabel>
+          <Input
+            id="name"
+            name="name"
+            placeholder="Jane Doe"
+            autoComplete="name"
+            aria-invalid={!!state.fieldErrors?.name}
+            disabled={isPending}
+          />
+          <FieldError errors={[{ message: state.fieldErrors?.name }]} />
+        </Field>
+
         <Field>
           <FieldLabel htmlFor="email">Email address</FieldLabel>
           <Input
@@ -53,8 +66,8 @@ export function LoginForm() {
               id="password"
               name="password"
               type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              autoComplete="current-password"
+              placeholder="min 8 characters"
+              autoComplete="new-password"
               aria-invalid={!!state.fieldErrors?.password}
               disabled={isPending}
               className="pr-8"
@@ -85,11 +98,11 @@ export function LoginForm() {
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2Icon className="animate-spin" />}
-          Sign in
+          Create account
         </Button>
 
         <FieldDescription className="text-center">
-          Don&apos;t have an account yet? <a href="/signup">Sign up</a>
+          Already have an account? <a href="/login">Sign in</a>
         </FieldDescription>
       </FieldGroup>
     </form>

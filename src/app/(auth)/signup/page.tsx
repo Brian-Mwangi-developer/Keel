@@ -5,18 +5,17 @@ import { redirect } from "next/navigation";
 import { ArrowLeftIcon } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { JoinForm } from "@/components/join-form";
+import { SignupForm } from "@/components/signup-form";
 
 export const metadata: Metadata = {
-  title: "Create your organization",
-  description: "Set up your workspace and admin account.",
+  title: "Create your account",
+  description: "Join your team's organization on Keel.",
 };
 
-export default async function JoinPage() {
-
+export default async function SignupPage() {
   const existingOrg = await prisma.organization.findFirst();
-  if (existingOrg) {
-    redirect("/signup");
+  if (!existingOrg) {
+    redirect("/join");
   }
 
   return (
@@ -29,7 +28,7 @@ export default async function JoinPage() {
           <ArrowLeftIcon className="size-4" />
           Back
         </Link>
-        <JoinForm />
+        <SignupForm />
       </div>
 
       <div className="relative hidden bg-sky-500 lg:flex lg:flex-col lg:items-center lg:justify-center lg:overflow-hidden lg:p-10">

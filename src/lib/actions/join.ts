@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation"
 import { put } from "@vercel/blob"
 import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
 import { APIError } from "better-auth/api"
 
 export type JoinFormState = {
@@ -18,10 +19,16 @@ function slugify(value: string) {
     .replace(/(^-|-$)+/g, "")
 }
 
+
 export async function joinAction(
   _prevState: JoinFormState,
   formData: FormData
 ): Promise<JoinFormState> {
+  const existingOrg = await prisma.organization.findFirst()
+  if (existingOrg) {
+    redirect("/login")
+  }
+
   const name = String(formData.get("name") ?? "").trim()
   const email = String(formData.get("email") ?? "").trim()
   const password = String(formData.get("password") ?? "")
@@ -69,25 +76,18 @@ export async function joinAction(
     }
 
     const asUser = new Headers({ cookie: sessionCookie })
+    const slug = slugify(organizationName) || "org"
 
-    const baseSlug = slugify(organizationName) || "org"
-    let slug = baseSlug
-    let attempt = 0
-    while (attempt < 5) {
-      try {
-        await auth.api.createOrganization({
-          body: { name: organizationName, slug, logo: logoUrl },
-          headers: asUser,
-        })
-        break
-      } catch (error) {
-        if (error instanceof APIError && error.body?.code === "ORGANIZATION_ALREADY_EXISTS") {
-          attempt += 1
-          slug = `${baseSlug}-${attempt + 1}`
-          continue
-        }
-        throw error
-      }
+    const organization = await auth.api.createOrganization({
+      body: { name: organizationName, slug, logo: logoUrl },
+      headers: asUser,
+    })
+
+    if (organization) {
+      await auth.api.setActiveOrganization({
+        body: { organizationId: organization.id },
+        headers: asUser,
+      })
     }
   } catch (error) {
     if (error instanceof APIError) {
@@ -99,5 +99,5 @@ export async function joinAction(
     return { error: "Something went wrong. Please try again." }
   }
 
-  redirect("/dashboard")
+  redirect("/dashboard?welcome=org")
 }
