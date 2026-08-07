@@ -2,7 +2,7 @@ import { MoreHorizontalIcon, ShieldIcon } from "lucide-react";
 
 import type { Team, TeamMember, DepartmentRole, User } from "@/generated/prisma/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/user-avatar";
 import { DepartmentMemberMenu } from "@/components/departments/department-member-menu";
 
 type MemberWithUser = TeamMember & {
@@ -37,11 +37,7 @@ export function DepartmentCard({
             className="flex items-center justify-between gap-2 rounded-lg px-1.5 py-1.5 hover:bg-muted/50"
           >
             <div className="flex min-w-0 items-center gap-2">
-              <Avatar size="sm">
-                <AvatarFallback>
-                  {member.user.name?.[0]?.toUpperCase() ?? "?"}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar user={member.user} size="sm" />
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium">{member.user.name}</p>
                 <p className="truncate text-xs text-muted-foreground">
