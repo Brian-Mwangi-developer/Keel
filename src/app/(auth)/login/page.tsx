@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeftIcon } from "lucide-react";
 
 import { LoginForm } from "@/components/login-form";
 
@@ -11,7 +13,14 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex items-center justify-center p-6 md:p-10">
+      <div className="relative flex items-center justify-center p-6 md:p-10">
+        <Link
+          href="/"
+          className="absolute top-6 left-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground md:top-10 md:left-10"
+        >
+          <ArrowLeftIcon className="size-4" />
+          Back
+        </Link>
         <LoginForm />
       </div>
 
