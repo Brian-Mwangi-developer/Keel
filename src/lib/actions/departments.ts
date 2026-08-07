@@ -118,6 +118,45 @@ export async function addDepartmentMemberAction(teamId: string, userId: string) 
   return { success: true } as const
 }
 
+/**
+ * The org-owner counterpart to addDepartmentMemberAction: lets the owner
+ * assign any org member to any department directly from /users, without
+ * needing to already be an admin of that department. Also lets the owner
+ * choose the role (member or admin) up front, in one step.
+ */
+export async function assignUserToDepartmentAction(
+  teamId: string,
+  userId: string,
+  role: "admin" | "member"
+) {
+  const session = await requireSession()
+  const organizationId = session.session.activeOrganizationId
+  if (!organizationId) {
+    throw new Error("No active organization.")
+  }
+  await requireOrgOwner(organizationId, session.user.id)
+
+  const requestHeaders = await headers()
+
+  const teamMember = await auth.api.addTeamMember({
+    body: { teamId, userId },
+    headers: requestHeaders,
+  })
+
+  await prisma.departmentRole.create({
+    data: {
+      teamId,
+      userId,
+      teamMemberId: teamMember.id,
+      role,
+    },
+  })
+
+  revalidatePath("/users")
+  revalidatePath("/departments")
+  return { success: true } as const
+}
+
 export async function removeDepartmentMemberAction(teamId: string, userId: string) {
   const session = await requireSession()
   await requireDepartmentAdmin(teamId, session.user.id)
