@@ -18,7 +18,7 @@ export default function LoginPage() {
       <div className="relative hidden bg-sky-500 lg:flex lg:flex-col lg:items-center lg:justify-center lg:overflow-hidden lg:p-10">
         <div className="relative z-10 mb-8 max-w-md text-center">
           <h2 className="text-2xl font-semibold tracking-tight text-white text-balance">
-            The simplest way to manage your workforce
+            Know the moment a number stops being true
           </h2>
           <p className="mt-2 text-sm text-sky-100 text-balance">
             Track trust, lineage, and quality across every asset your organization owns.

@@ -24,7 +24,7 @@ export function LoginForm() {
   return (
     <form action={formAction} className="flex w-full max-w-sm flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <Logo />
+        <Logo className="text-2xl" />
         <h1 className="text-xl font-semibold tracking-tight">Sign in</h1>
         <p className="text-sm text-muted-foreground">
           Welcome back. Enter your credentials to access your organization.

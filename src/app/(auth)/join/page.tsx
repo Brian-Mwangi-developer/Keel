@@ -18,10 +18,10 @@ export default function JoinPage() {
       <div className="relative hidden bg-sky-500 lg:flex lg:flex-col lg:items-center lg:justify-center lg:overflow-hidden lg:p-10">
         <div className="relative z-10 mb-8 max-w-md text-center">
           <h2 className="text-2xl font-semibold tracking-tight text-white text-balance">
-            Give your team a single source of truth
+            See trust and lineage across your pipeline
           </h2>
           <p className="mt-2 text-sm text-sky-100 text-balance">
-            Track trust, lineage, and quality across every asset your organization owns.
+            Set up your organization and start scoring the data your team depends on.
           </p>
         </div>
         <div className="relative z-10 w-full max-w-2xl overflow-hidden rounded-xl shadow-2xl ring-1 ring-white/20">

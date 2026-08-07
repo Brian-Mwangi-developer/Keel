@@ -1,24 +1,21 @@
+import { Anchor } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
-function Logo({ className, ...props }: React.ComponentProps<"pre">) {
+function Logo({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <pre
+    <div
       className={cn(
-        "font-mono text-[0.5rem] leading-[1.1] text-primary select-none",
+        "flex shrink-0 items-center gap-1.5 text-primary",
         className,
       )}
       {...props}
     >
-      {String.raw`
-█████   ████                   ████
-░░███   ███░                   ░░███
- ░███  ███     ██████   ██████  ░███
- ░███████     ███░░███ ███░░███ ░███
- ░███░░███   ░███████ ░███████  ░███
- ░███ ░░███  ░███░░░  ░███░░░   ░███
- █████ ░░████░░██████ ░░██████  █████
-░░░░░   ░░░░  ░░░░░░   ░░░░░░  ░░░░░ `}
-    </pre>
+      <Anchor className="size-[1em]" strokeWidth={3} />
+      <span className="font-sans text-[1.5em] leading-none font-bold tracking-tight">
+        Keel
+      </span>
+    </div>
   );
 }
 

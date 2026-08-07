@@ -40,7 +40,7 @@ export function JoinForm() {
   return (
     <form action={formAction} className="flex w-full max-w-sm flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <Logo />
+        <Logo className="text-2xl" />
         <h1 className="text-xl font-semibold tracking-tight">Create your organization</h1>
         <p className="text-sm text-muted-foreground">
           Set up your workspace and admin account to get started.
