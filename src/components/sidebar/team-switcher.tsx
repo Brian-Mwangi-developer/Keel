@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Plus, Users2 } from "lucide-react";
+import { CheckIcon, ChevronDown, Plus, Users2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { authClient } from "@/lib/auth-client";
@@ -38,7 +38,23 @@ export function TeamSwitcher({
   const activeTeam = teams.find((team) => team.id === activeTeamId) ?? null;
 
   if (!organization) {
-    return null;
+    // Every authenticated session should have an active organization in
+    // this build (there's only ever one). Landing here means the session
+    // wasn't set up right — surface it instead of silently hiding nav.
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton className="w-fit px-1.5" disabled>
+            <div className="flex aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+              <Users2 className="size-3" />
+            </div>
+            <span className="truncate font-medium text-muted-foreground">
+              No organization
+            </span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
   }
 
   async function switchTeam(teamId: string | null) {
@@ -76,9 +92,6 @@ export function TeamSwitcher({
             side="bottom"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              {organization.name}
-            </DropdownMenuLabel>
             <DropdownMenuGroup>
               <DropdownMenuItem
                 onClick={() => switchTeam(null)}
@@ -88,17 +101,18 @@ export function TeamSwitcher({
                 <div className="flex size-6 items-center justify-center rounded-xs border">
                   <Users2 className="size-4 shrink-0" />
                 </div>
-                Whole organization
+                <span className="truncate">{organization.name}</span>
+                {!activeTeam && <CheckIcon className="ml-auto size-4" />}
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
             {teams.length > 0 && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs text-muted-foreground">
-                  Departments
-                </DropdownMenuLabel>
                 <DropdownMenuGroup>
+                  <DropdownMenuLabel className="text-xs text-muted-foreground">
+                    Departments
+                  </DropdownMenuLabel>
                   {teams.map((team) => (
                     <DropdownMenuItem
                       key={team.id}
@@ -109,7 +123,10 @@ export function TeamSwitcher({
                       <div className="flex size-6 items-center justify-center rounded-xs border">
                         <Users2 className="size-4 shrink-0" />
                       </div>
-                      {team.name}
+                      <span className="truncate">{team.name}</span>
+                      {activeTeam?.id === team.id && (
+                        <CheckIcon className="ml-auto size-4" />
+                      )}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuGroup>

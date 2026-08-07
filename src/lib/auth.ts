@@ -23,6 +23,13 @@ export const auth = betterAuth({
             teams: {
                 enabled: true,
                 maximumMembersPerTeam: 500,
+                // Without this, better-auth auto-creates a team named after
+                // the organization on every createOrganization call, with
+                // no DepartmentRole row for it — orphaning it from our
+                // admin/member bookkeeping. Departments should start empty.
+                defaultTeam: {
+                    enabled: false,
+                },
             },
         }),
         // Must stay last so it can capture cookies set by the plugins above.
