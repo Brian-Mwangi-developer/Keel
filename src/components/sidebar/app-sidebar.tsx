@@ -13,6 +13,7 @@ import {
   MessageCircleQuestion,
   Settings2,
   Trash2,
+  Users,
   Users2,
 } from "lucide-react";
 import type { Organization, Team } from "@/generated/prisma/client";
@@ -20,19 +21,31 @@ import { TeamSwitcher } from "./team-switcher";
 import { NavMain } from "./nav-main";
 import { NavSecondary } from "./nav-secondary";
 
-const navMain = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LibraryBig,
-    isActive: true,
-  },
-  {
-    title: "Departments",
-    url: "/departments",
-    icon: Users2,
-  },
-];
+function getNavMain(isOrgOwner: boolean) {
+  return [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: LibraryBig,
+      isActive: true,
+    },
+    {
+      title: "Departments",
+      url: "/departments",
+      icon: Users2,
+    },
+    // Only the organization owner can see the full user roster.
+    ...(isOrgOwner
+      ? [
+          {
+            title: "Users",
+            url: "/users",
+            icon: Users,
+          },
+        ]
+      : []),
+  ];
+}
 
 const navSecondary = [
   {
@@ -66,11 +79,13 @@ export function AppSidebar({
   organization,
   teams,
   activeTeamId,
+  isOrgOwner,
   ...props
 }: {
   organization: Organization | null;
   teams: Team[];
   activeTeamId: string | null;
+  isOrgOwner: boolean;
 } & React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar className="border-r-0" {...props}>
@@ -79,8 +94,9 @@ export function AppSidebar({
           organization={organization}
           teams={teams}
           activeTeamId={activeTeamId}
+          isOrgOwner={isOrgOwner}
         />
-        <NavMain items={navMain} />
+        <NavMain items={getNavMain(isOrgOwner)} />
       </SidebarHeader>
       <SidebarContent>
         <NavSecondary items={navSecondary} className="mt-auto" />

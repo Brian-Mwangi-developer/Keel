@@ -20,6 +20,22 @@ async function requireSession() {
 }
 
 /**
+ * Only the organization owner can create departments — a plain member
+ * (or even an org "admin") isn't enough. Checked directly against the
+ * Member table rather than better-auth's ac/hasPermission system, since
+ * "owner" here means the literal org-role string, not a permission a
+ * custom role could also satisfy.
+ */
+async function requireOrgOwner(organizationId: string, userId: string) {
+  const member = await prisma.member.findFirst({
+    where: { organizationId, userId },
+  })
+  if (member?.role !== "owner") {
+    throw new Error("Only the organization owner can do this.")
+  }
+}
+
+/**
  * Departments are better-auth "teams" under the hood (see src/lib/auth.ts).
  * Better Auth's createTeam does not add the creator as a member, and its
  * teamMember table has no room for a role, so we do both steps ourselves:
@@ -39,6 +55,12 @@ export async function createDepartmentAction(
   const organizationId = session.session.activeOrganizationId
   if (!organizationId) {
     return { error: "Select an organization before creating a department." }
+  }
+
+  try {
+    await requireOrgOwner(organizationId, session.user.id)
+  } catch {
+    return { error: "Only the organization owner can create departments." }
   }
 
   const requestHeaders = await headers()

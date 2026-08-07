@@ -19,15 +19,18 @@ export default async function AuthenticatedLayout({
   }
 
   const organizationId = session.session.activeOrganizationId;
-  const [organization, teams] = organizationId
+  const [organization, teams, currentMember] = organizationId
     ? await Promise.all([
         prisma.organization.findUnique({ where: { id: organizationId } }),
         prisma.team.findMany({
           where: { organizationId },
           orderBy: { createdAt: "asc" },
         }),
+        prisma.member.findFirst({
+          where: { organizationId, userId: session.user.id },
+        }),
       ])
-    : [null, []];
+    : [null, [], null];
 
   return (
     <SidebarProvider>
@@ -35,6 +38,7 @@ export default async function AuthenticatedLayout({
         organization={organization}
         teams={teams}
         activeTeamId={session.session.activeTeamId ?? null}
+        isOrgOwner={currentMember?.role === "owner"}
       />
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">

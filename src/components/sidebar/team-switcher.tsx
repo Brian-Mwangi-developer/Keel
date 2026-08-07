@@ -27,10 +27,12 @@ export function TeamSwitcher({
   organization,
   teams,
   activeTeamId,
+  isOrgOwner,
 }: {
   organization: Organization | null;
   teams: Team[];
   activeTeamId: string | null;
+  isOrgOwner: boolean;
 }) {
   const router = useRouter();
   const [pendingTeamId, setPendingTeamId] = React.useState<string | null>(null);
@@ -133,25 +135,31 @@ export function TeamSwitcher({
               </>
             )}
 
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="gap-2 p-2"
-              onClick={() => setCreateOpen(true)}
-            >
-              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                <Plus className="size-4" />
-              </div>
-              <div className="font-medium text-muted-foreground">
-                Add department
-              </div>
-            </DropdownMenuItem>
+            {isOrgOwner && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="gap-2 p-2"
+                  onClick={() => setCreateOpen(true)}
+                >
+                  <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                    <Plus className="size-4" />
+                  </div>
+                  <div className="font-medium text-muted-foreground">
+                    Add department
+                  </div>
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
 
       {/* Lives outside the menu so it survives the menu unmounting on
           click — see Base UI's "connecting a dialog to a menu" pattern. */}
-      <CreateDepartmentDialog open={createOpen} onOpenChange={setCreateOpen} />
+      {isOrgOwner && (
+        <CreateDepartmentDialog open={createOpen} onOpenChange={setCreateOpen} />
+      )}
     </SidebarMenu>
   );
 }

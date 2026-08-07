@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
 
 const AUTH_ROUTES = ["/join", "/login", "/signup"];
-const PROTECTED_ROUTES = ["/dashboard", "/departments"];
+const PROTECTED_ROUTES = ["/dashboard", "/departments", "/users"];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -37,5 +37,6 @@ export const config = {
     "/signup",
     "/dashboard/:path*",
     "/departments/:path*",
+    "/users/:path*",
   ],
 };

@@ -30,15 +30,21 @@ export default async function DepartmentsPage() {
     );
   }
 
-  const teams = await prisma.team.findMany({
-    where: { organizationId },
-    orderBy: { createdAt: "asc" },
-    include: {
-      members: {
-        include: { user: true, departmentRole: true },
+  const [teams, currentMember] = await Promise.all([
+    prisma.team.findMany({
+      where: { organizationId },
+      orderBy: { createdAt: "asc" },
+      include: {
+        members: {
+          include: { user: true, departmentRole: true },
+        },
       },
-    },
-  });
+    }),
+    prisma.member.findFirst({
+      where: { organizationId, userId: session.user.id },
+    }),
+  ]);
+  const isOrgOwner = currentMember?.role === "owner";
 
   return (
     <div className="flex flex-1 flex-col gap-6 p-6">
@@ -50,7 +56,7 @@ export default async function DepartmentsPage() {
             can administer each one.
           </p>
         </div>
-        <CreateDepartmentDialog />
+        {isOrgOwner && <CreateDepartmentDialog />}
       </div>
 
       {teams.length === 0 ? (
@@ -59,10 +65,12 @@ export default async function DepartmentsPage() {
           <div>
             <p className="text-sm font-medium">No departments yet</p>
             <p className="text-sm text-muted-foreground">
-              Create your first department to start grouping members.
+              {isOrgOwner
+                ? "Create your first department to start grouping members."
+                : "Ask your organization owner to create one."}
             </p>
           </div>
-          <CreateDepartmentDialog />
+          {isOrgOwner && <CreateDepartmentDialog />}
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
