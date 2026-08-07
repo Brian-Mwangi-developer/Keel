@@ -25,6 +25,9 @@ model User {
 
   members Member[]
 
+  teamMembers     TeamMember[]
+  departmentRoles DepartmentRole[]
+
   @@unique([email])
   @@map("user")
 }
@@ -87,6 +90,7 @@ model Organization {
   createdAt DateTime
   metadata  String?
   members   Member[]
+  teams     Team[]
 
   @@unique([slug])
   @@map("organization")
@@ -104,4 +108,50 @@ model Member {
   @@index([organizationId])
   @@index([userId])
   @@map("member")
+}
+
+
+model Team {
+  id             String       @id
+  name           String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime
+  updatedAt      DateTime?
+  members        TeamMember[]
+
+  @@index([organizationId])
+  @@map("team")
+}
+
+model TeamMember {
+  id        String   @id
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime
+
+  
+  departmentRole DepartmentRole?
+
+  @@index([teamId])
+  @@index([userId])
+  @@map("team_member")
+}
+
+
+model DepartmentRole {
+  id           String     @id @default(cuid())
+  teamId       String
+  userId       String
+  role         String     @default("member") // "admin" | "member"
+  teamMemberId String     @unique
+  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([teamId, userId])
+  @@map("department_role")
 }
