@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from '@prisma/adapter-pg';
 import { organization } from "better-auth/plugins"
+import { nextCookies } from "better-auth/next-js"
 
 
 
@@ -19,6 +20,8 @@ export const auth = betterAuth({
         enabled: true,
     },
     plugins:[
-        organization()
+        organization(),
+        // Must stay last so it can capture cookies set by the plugins above.
+        nextCookies(),
     ]
 });
