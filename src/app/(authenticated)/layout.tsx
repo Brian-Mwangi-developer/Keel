@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { NotificationBell } from "@/components/keel/notification-bell";
 import {
   SidebarInset,
   SidebarProvider,
@@ -41,8 +42,9 @@ export default async function AuthenticatedLayout({
         isOrgOwner={currentMember?.role === "owner"}
       />
       <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+        <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b px-4">
           <SidebarTrigger />
+          <NotificationBell />
         </header>
         <div className="flex flex-1 flex-col">{children}</div>
       </SidebarInset>
