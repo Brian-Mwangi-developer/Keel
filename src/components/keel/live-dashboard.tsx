@@ -245,7 +245,7 @@ export function LiveDashboard({
 function LiveDot({ live }: { live: boolean }) {
   return (
     <span
-      className={`inline-flex items-center gap-1 text-[10px] font-medium ${live ? "text-success" : "text-muted-foreground"}`}
+      className={`inline-flex items-center gap-1 text-[10px] font-medium animate-pulse ${live ? "text-success" : "text-muted-foreground"}`}
       title={live ? "Polling the live backend" : "Last poll failed — retrying"}
     >
       <Radio className="size-5" />
