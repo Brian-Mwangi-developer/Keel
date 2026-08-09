@@ -7,12 +7,14 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import {
-  Blocks,
-  Calendar,
+  Bot,
+  Database,
   LibraryBig,
+  ListChecks,
   MessageCircleQuestion,
   Settings2,
-  Trash2,
+  ShieldAlert,
+  Waypoints,
   Users,
   Users2,
 } from "lucide-react";
@@ -24,10 +26,29 @@ import { NavSecondary } from "./nav-secondary";
 function getNavMain(isOrgOwner: boolean) {
   return [
     {
-      title: "Dashboard",
+      title: "Overview",
       url: "/dashboard",
       icon: LibraryBig,
-      isActive: true,
+    },
+    {
+      title: "Assets",
+      url: "/assets",
+      icon: Waypoints,
+    },
+    {
+      title: "Quality rules",
+      url: "/rules",
+      icon: ListChecks,
+    },
+    {
+      title: "Sources",
+      url: "/sources",
+      icon: Database,
+    },
+    {
+      title: "Incidents",
+      url: "/incidents",
+      icon: Bot,
     },
     {
       title: "Departments",
@@ -49,24 +70,14 @@ function getNavMain(isOrgOwner: boolean) {
 
 const navSecondary = [
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Severity policy",
+    url: "/settings/severity-policy",
+    icon: ShieldAlert,
   },
   {
     title: "Settings",
     url: "#",
     icon: Settings2,
-  },
-  {
-    title: "Templates",
-    url: "#",
-    icon: Blocks,
-  },
-  {
-    title: "Trash",
-    url: "#",
-    icon: Trash2,
   },
   {
     title: "Help",
