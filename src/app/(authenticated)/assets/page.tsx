@@ -21,8 +21,7 @@ export default async function AssetsPage(props: PageProps<"/assets">) {
       <div>
         <h1 className="font-heading text-2xl font-semibold">Assets</h1>
         <p className="text-sm text-muted-foreground">
-          Every asset connected to this pipeline&apos;s lineage graph, scored live — discovered from DataHub, not a
-          fixed list.
+          Every asset connected to this pipeline&apos;s lineage graph, scored live — discovered from DataHub.
         </p>
       </div>
 

@@ -1,7 +1,4 @@
-// Server-only fetch wrappers over keel-backend. Every trust score in this
-// product is a live computation over DataHub (see keel-backend's
-// app/trust/engine.py) — nothing here is cached beyond a single request,
-// so "no-store" is the deliberate default throughout, not an oversight.
+// Server-only fetch wrappers over keel-backend.
 // Called from Server Components directly; mutations live in actions.ts.
 import "server-only";
 
