@@ -1,7 +1,7 @@
+import { ArrowRightIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRightIcon } from "lucide-react";
 
 import { Logo } from "@/components/logo";
 import { buttonVariants } from "@/components/ui/button";
@@ -39,7 +39,10 @@ function VerdictChip({
     <span
       className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 font-mono text-xs font-medium ${verdictStyles[verdict]}`}
     >
-      <span className={`size-1.5 rounded-full ${verdictDot[verdict]}`} aria-hidden />
+      <span
+        className={`size-1.5 rounded-full ${verdictDot[verdict]}`}
+        aria-hidden
+      />
       {score} — {label}
     </span>
   );
@@ -81,13 +84,14 @@ export default function Home() {
               Keel — a trust layer for data pipelines
             </p>
             <h1 className="mt-4 text-4xl font-bold tracking-tight text-balance md:text-5xl">
-              The scariest bugs are the ones where nothing looks broken.
+              Good decisions need data you can actually trust right now.
             </h1>
             <p className="mt-5 text-lg text-muted-foreground text-balance">
-              A dashboard can load, render, and look perfectly fine — while quietly
-              showing a lie, because something four steps upstream broke twenty
-              minutes ago. Keel finds that in under a minute, automatically, before
-              anyone acts on the bad number.
+              Not data that looked fine an hour ago. Keel scores every asset
+              in your pipeline live, inherited from whatever it&apos;s built
+              on, so you always know whether the number in front of you is
+              still safe to act on — and if it isn&apos;t, exactly where the
+              problem started.
             </p>
             <div className="mt-8 flex items-center justify-center gap-3">
               <Link
@@ -113,7 +117,7 @@ export default function Home() {
 
           <div className="mx-auto mt-16 max-w-4xl overflow-hidden rounded-xl border border-border shadow-sm">
             <Image
-              src="/image.png"
+              src="/sell.png"
               alt="Keel's live trust index and lineage constellation for a data pipeline"
               width={1730}
               height={1043}
@@ -136,7 +140,8 @@ export default function Home() {
                 dashboard, but because of what it&apos;s made of.
               </p>
               <p className="mt-4 font-mono text-sm text-muted-foreground">
-                trust = min( own_hygiene × validity_gate, min(upstream_trust) + hop_recovery )
+                trust = min( own_hygiene × validity_gate, min(upstream_trust) +
+                hop_recovery )
               </p>
             </div>
 
@@ -147,7 +152,9 @@ export default function Home() {
               <div className="flex items-center justify-between rounded-lg border border-border p-4">
                 <div>
                   <p className="text-sm font-medium">exec_revenue_daily</p>
-                  <p className="text-xs text-muted-foreground">looker · dashboard</p>
+                  <p className="text-xs text-muted-foreground">
+                    looker · dashboard
+                  </p>
                 </div>
                 <VerdictChip score={90} label="safe to use" verdict="good" />
               </div>
@@ -159,7 +166,11 @@ export default function Home() {
                     looker · dashboard — unchanged
                   </p>
                 </div>
-                <VerdictChip score={61} label="use with care" verdict="warning" />
+                <VerdictChip
+                  score={61}
+                  label="use with care"
+                  verdict="warning"
+                />
               </div>
             </div>
           </div>
@@ -173,9 +184,9 @@ export default function Home() {
                 Damage travels downstream. Keel shows you exactly how.
               </h2>
               <p className="mt-4 text-muted-foreground">
-                A real lineage graph, not a health-check dashboard. You can&apos;t
-                compute what an asset is built from without one — Keel only exists
-                because that graph already exists.
+                A real lineage graph, not a health-check dashboard. You
+                can&apos;t compute what an asset is built from without one —
+                Keel only exists because that graph already exists.
               </p>
             </div>
 
@@ -189,20 +200,36 @@ export default function Home() {
                 <ArrowRightIcon className="size-4 shrink-0 text-muted-foreground" />
                 <div className="rounded-lg border border-border bg-card p-4">
                   <p className="text-sm font-medium">driver_surge_features</p>
-                  <p className="text-xs text-muted-foreground">snowflake · table</p>
+                  <p className="text-xs text-muted-foreground">
+                    snowflake · table
+                  </p>
                   <VerdictChip score={26} label="don't trust" verdict="bad" />
                 </div>
                 <ArrowRightIcon className="size-4 shrink-0 text-muted-foreground" />
                 <div className="rounded-lg border border-border bg-card p-4">
-                  <p className="text-sm font-medium">dynamic_pricing_decisions</p>
-                  <p className="text-xs text-muted-foreground">snowflake · table</p>
-                  <VerdictChip score={40} label="use with care" verdict="warning" />
+                  <p className="text-sm font-medium">
+                    dynamic_pricing_decisions
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    snowflake · table
+                  </p>
+                  <VerdictChip
+                    score={40}
+                    label="use with care"
+                    verdict="warning"
+                  />
                 </div>
                 <ArrowRightIcon className="size-4 shrink-0 text-muted-foreground" />
                 <div className="rounded-lg border border-border bg-card p-4">
                   <p className="text-sm font-medium">exec_revenue_daily</p>
-                  <p className="text-xs text-muted-foreground">looker · dashboard</p>
-                  <VerdictChip score={54} label="use with care" verdict="warning" />
+                  <p className="text-xs text-muted-foreground">
+                    looker · dashboard
+                  </p>
+                  <VerdictChip
+                    score={54}
+                    label="use with care"
+                    verdict="warning"
+                  />
                 </div>
               </div>
             </div>
@@ -217,7 +244,8 @@ export default function Home() {
         <section className="border-t border-border bg-secondary/40">
           <div className="mx-auto w-full max-w-6xl px-6 py-20 md:py-28">
             <h2 className="max-w-xl text-2xl font-bold tracking-tight md:text-3xl">
-              Everything you need to answer &ldquo;can I trust this number.&rdquo;
+              Everything you need to answer &ldquo;can I trust this
+              number.&rdquo;
             </h2>
 
             <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -227,7 +255,8 @@ export default function Home() {
                 </p>
                 <p className="mt-2 text-sm text-foreground">
                   Click any low score to see exactly which upstream asset capped
-                  it, how many hops away, and the literal bad row that caused it.
+                  it, how many hops away, and the literal bad row that caused
+                  it.
                 </p>
               </div>
               <div className="rounded-xl border border-border bg-card p-6">
@@ -236,7 +265,8 @@ export default function Home() {
                 </p>
                 <p className="mt-2 text-sm text-foreground">
                   See every team and asset affected by a break, and alert the
-                  right owner — pulled from your metadata graph, never hardcoded.
+                  right owner — pulled from your metadata graph, never
+                  hardcoded.
                 </p>
               </div>
               <div className="rounded-xl border border-border bg-card p-6">
@@ -259,8 +289,8 @@ export default function Home() {
               Built on DataHub
             </p>
             <p className="mt-4 text-lg text-balance">
-              Keel isn&apos;t a new catalog — it&apos;s the trust layer on top of
-              the lineage graph you already have, or are adopting.
+              Keel isn&apos;t a new catalog — it&apos;s the trust layer on top
+              of the lineage graph you already have, or are adopting.
             </p>
           </div>
         </section>
@@ -269,7 +299,8 @@ export default function Home() {
         <section className="border-t border-border">
           <div className="mx-auto w-full max-w-3xl px-6 py-20 text-center md:py-28">
             <h2 className="text-2xl font-bold tracking-tight text-balance md:text-3xl">
-              Know the moment a number stops being true — before anyone acts on it.
+              Know the moment a number stops being true — before anyone acts on
+              it.
             </h2>
             <div className="mt-8 flex items-center justify-center gap-3">
               <Link
