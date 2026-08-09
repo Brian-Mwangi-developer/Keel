@@ -1,7 +1,7 @@
+import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
 
 import { LoginForm } from "@/components/login-form";
 
@@ -30,12 +30,13 @@ export default function LoginPage() {
             Know the moment a number stops being true
           </h2>
           <p className="mt-2 text-sm text-sky-100 text-balance">
-            Track trust, lineage, and quality across every asset your organization owns.
+            Track trust, lineage, and quality across every asset your
+            organization owns.
           </p>
         </div>
         <div className="relative z-10 w-full max-w-2xl overflow-hidden rounded-xl shadow-2xl ring-1 ring-white/20">
           <Image
-            src="/image.png"
+            src="/sell.png"
             alt="Keel dashboard overview"
             width={1730}
             height={1043}

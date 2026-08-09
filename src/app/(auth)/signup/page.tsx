@@ -1,11 +1,11 @@
+import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeftIcon } from "lucide-react";
 
-import { prisma } from "@/lib/prisma";
 import { SignupForm } from "@/components/signup-form";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Create your account",
@@ -37,12 +37,13 @@ export default async function SignupPage() {
             See trust and lineage across your pipeline
           </h2>
           <p className="mt-2 text-sm text-sky-100 text-balance">
-            Set up your organization and start scoring the data your team depends on.
+            Set up your organization and start scoring the data your team
+            depends on.
           </p>
         </div>
         <div className="relative z-10 w-full max-w-2xl overflow-hidden rounded-xl shadow-2xl ring-1 ring-white/20">
           <Image
-            src="/image.png"
+            src="/sell.png"
             alt="Keel dashboard overview"
             width={1730}
             height={1043}
