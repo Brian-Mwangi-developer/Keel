@@ -5,12 +5,14 @@ import { cn } from "@/lib/utils";
 import { BAND_STYLES, shortUrn } from "@/lib/keel/format";
 import type { LineageOut } from "@/lib/keel/types";
 import { AssetDrawer } from "@/components/keel/asset-drawer";
+import { platformLogoSrc } from "@/components/keel/platform-icon";
 
 const COL_WIDTH = 240;
 const ROW_HEIGHT = 120;
 const NODE_R = 26;
 const PAD = 48;
 const LABEL_CHARS_PER_LINE = 18;
+const PLATFORM_BADGE_R = 9;
 
 /** Breaks a long asset name onto up to two lines, preferring to split on a
  * word boundary (_ or space) near the middle rather than mid-word, so
@@ -158,6 +160,34 @@ export function LineageGraph({ lineage, centerUrn }: { lineage: LineageOut; cent
               <text textAnchor="middle" dy="0.35em" className={cn("font-mono text-sm font-semibold tabular-nums", style.text)} fill="currentColor">
                 {n.score}
               </text>
+              {(() => {
+                const logo = platformLogoSrc(n.platform);
+                if (!logo) return null;
+                const bx = NODE_R * 0.72;
+                const by = NODE_R * 0.72;
+                // "meet" (SVG's object-contain), not "slice" (object-cover)
+                // -- the source PNGs aren't uniformly square (Looker's is
+                // 637x1024), and slice center-crops a tall image against a
+                // circular frame, chopping its top/bottom off.
+                const inner = PLATFORM_BADGE_R - 1.5;
+                return (
+                  <g transform={`translate(${bx},${by})`}>
+                    <circle r={PLATFORM_BADGE_R} fill="white" stroke="var(--border)" strokeWidth={1.5} />
+                    <clipPath id={`platform-clip-${n.urn}`}>
+                      <circle r={inner} />
+                    </clipPath>
+                    <image
+                      href={logo}
+                      x={-inner}
+                      y={-inner}
+                      width={inner * 2}
+                      height={inner * 2}
+                      preserveAspectRatio="xMidYMid meet"
+                      clipPath={`url(#platform-clip-${n.urn})`}
+                    />
+                  </g>
+                );
+              })()}
               <text textAnchor="middle" y={NODE_R + 16} className="fill-foreground text-[11px] font-medium">
                 {line1}
               </text>

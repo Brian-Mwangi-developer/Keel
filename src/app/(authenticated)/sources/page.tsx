@@ -1,5 +1,6 @@
 import { getPipelineOverview, listSources } from "@/lib/keel/client";
 import { ConnectSourceDialog, UploadSourceDialog } from "@/components/keel/source-dialogs";
+import { PlatformIcon } from "@/components/keel/platform-icon";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -29,7 +30,10 @@ export default async function SourcesPage(props: PageProps<"/sources">) {
         {sources.map((s) => (
           <Card key={s.platform}>
             <CardContent className="flex flex-col gap-2">
-              <span className="font-heading text-lg font-medium capitalize">{s.platform}</span>
+              <div className="flex items-center gap-2">
+                <PlatformIcon platform={s.platform} className="size-8" />
+                <span className="font-heading text-lg font-medium capitalize">{s.platform}</span>
+              </div>
               <span className="text-sm text-muted-foreground">
                 {s.asset_count} asset{s.asset_count === 1 ? "" : "s"}
               </span>

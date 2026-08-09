@@ -12,6 +12,7 @@ import {
 } from "@/lib/keel/client";
 import { formatIso } from "@/lib/keel/format";
 import { VerdictBadge } from "@/components/keel/verdict-badge";
+import { PlatformIcon } from "@/components/keel/platform-icon";
 import { LineageGraph } from "@/components/keel/lineage-graph";
 import { BreakdownView } from "@/components/keel/breakdown-view";
 import { RulesTable } from "@/components/keel/rules-table";
@@ -65,6 +66,7 @@ export default async function AssetDetailPage(props: PageProps<"/assets/[urn]">)
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-2">
+            <PlatformIcon platform={asset.platform} className="size-7" />
             <h1 className="font-heading text-2xl font-semibold">{asset.name}</h1>
             <Badge variant="outline" className="font-normal">
               {asset.platform} · {asset.kind}

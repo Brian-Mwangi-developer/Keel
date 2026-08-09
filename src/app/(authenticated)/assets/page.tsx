@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { getPipelineOverview, listAssets } from "@/lib/keel/client";
 import { VerdictBadge } from "@/components/keel/verdict-badge";
+import { PlatformIcon } from "@/components/keel/platform-icon";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -29,7 +30,13 @@ export default async function AssetsPage(props: PageProps<"/assets">) {
         <div className="flex flex-wrap items-center gap-2">
           <FilterLink label="All platforms" active={!platform} href={`/assets`} />
           {platforms.map((p) => (
-            <FilterLink key={p} label={p} active={platform === p} href={`/assets?platform=${encodeURIComponent(p)}`} />
+            <FilterLink
+              key={p}
+              label={p}
+              active={platform === p}
+              href={`/assets?platform=${encodeURIComponent(p)}`}
+              icon={<PlatformIcon platform={p} className="size-4" />}
+            />
           ))}
         </div>
       )}
@@ -50,10 +57,13 @@ export default async function AssetsPage(props: PageProps<"/assets">) {
               {assets.map((a) => (
                 <tr key={a.urn} className="border-b last:border-0 hover:bg-muted/40">
                   <td className="py-3">
-                    <Link href={`/assets/${encodeURIComponent(a.urn)}`} className="flex flex-col hover:underline">
-                      <span className="font-medium">{a.name}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {a.platform} · {a.kind}
+                    <Link href={`/assets/${encodeURIComponent(a.urn)}`} className="flex items-center gap-2 hover:underline">
+                      <PlatformIcon platform={a.platform} className="size-6" />
+                      <span className="flex flex-col">
+                        <span className="font-medium">{a.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {a.platform} · {a.kind}
+                        </span>
                       </span>
                     </Link>
                   </td>
@@ -94,14 +104,25 @@ export default async function AssetsPage(props: PageProps<"/assets">) {
   );
 }
 
-function FilterLink({ label, active, href }: { label: string; active: boolean; href: string }) {
+function FilterLink({
+  label,
+  active,
+  href,
+  icon,
+}: {
+  label: string;
+  active: boolean;
+  href: string;
+  icon?: React.ReactNode;
+}) {
   return (
     <Link
       href={href}
-      className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+      className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium capitalize transition-colors ${
         active ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:bg-muted"
       }`}
     >
+      {icon}
       {label}
     </Link>
   );

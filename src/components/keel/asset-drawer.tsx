@@ -15,6 +15,7 @@ import { useEffect, useState, useTransition, type CSSProperties } from "react";
 import { toast } from "sonner";
 
 import { hygieneExplanation } from "@/components/keel/hygiene-tooltips";
+import { PlatformIcon } from "@/components/keel/platform-icon";
 import { RulesTable } from "@/components/keel/rules-table";
 import { ScoreDot } from "@/components/keel/verdict-badge";
 import { Badge } from "@/components/ui/badge";
@@ -124,13 +125,16 @@ export function AssetDrawer({
           <>
             <DrawerHeader className="border-b pb-4">
               <div className="flex items-start justify-between gap-3">
-                <div className="flex flex-col gap-1">
-                  <DrawerTitle className="text-lg">
-                    {data.asset.name}
-                  </DrawerTitle>
-                  <DrawerDescription className="font-mono text-[10px] break-all">
-                    {data.asset.urn}
-                  </DrawerDescription>
+                <div className="flex items-start gap-2">
+                  <PlatformIcon platform={data.asset.platform} className="mt-0.5 size-7" />
+                  <div className="flex flex-col gap-1">
+                    <DrawerTitle className="text-lg">
+                      {data.asset.name}
+                    </DrawerTitle>
+                    <DrawerDescription className="font-mono text-[10px] break-all">
+                      {data.asset.urn}
+                    </DrawerDescription>
+                  </div>
                 </div>
                 <div className="flex shrink-0 flex-col items-end">
                   <span className="font-mono text-3xl font-semibold tabular-nums">
@@ -289,6 +293,7 @@ export function AssetDrawer({
                       >
                         <span className="flex items-center gap-2">
                           <ScoreDot band={b.band} />
+                          <PlatformIcon platform={b.platform} className="size-4" />
                           {b.name}
                         </span>
                         <span className="flex items-center gap-2 text-xs text-muted-foreground">

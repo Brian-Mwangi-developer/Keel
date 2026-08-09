@@ -3,6 +3,7 @@ import { CircleCheck, CircleDashed, CircleX } from "lucide-react";
 
 import { getPipelineOverview, listAssets, listRules } from "@/lib/keel/client";
 import { shortUrn } from "@/lib/keel/format";
+import { PlatformIcon } from "@/components/keel/platform-icon";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -42,7 +43,10 @@ export default async function RulesPage(props: PageProps<"/rules">) {
         <Card key={asset.urn}>
           <CardContent className="flex flex-col gap-3">
             <Link href={`/assets/${encodeURIComponent(asset.urn)}`} className="flex items-center justify-between hover:underline">
-              <span className="font-medium">{shortUrn(asset.urn)}</span>
+              <span className="flex items-center gap-2 font-medium">
+                <PlatformIcon platform={asset.platform} className="size-5" />
+                {shortUrn(asset.urn)}
+              </span>
               <span className="text-xs text-muted-foreground">{asset.platform}</span>
             </Link>
             <div className="flex flex-col gap-2">
