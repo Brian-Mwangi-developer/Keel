@@ -6,10 +6,12 @@ import type {
   AssetDetailOut,
   AssetOut,
   BreakdownOut,
+  DepartmentChannelOut,
   EditAndCheckOut,
   FeedEventOut,
   FlagHistoryEntryOut,
   IncidentRecord,
+  InjectScenarioOut,
   InvestigateOut,
   LineageOut,
   LocalRow,
@@ -138,6 +140,18 @@ export function listIncidents(): Promise<IncidentRecord[]> {
 
 export function getIncident(id: string): Promise<IncidentRecord> {
   return keelFetch(`/agent/incidents/${encodeURIComponent(id)}`);
+}
+
+// --- Demo scenarios ---------------------------------------------------
+
+export function listInjectScenarios(): Promise<InjectScenarioOut[]> {
+  return keelFetch(`/demo/scenarios`);
+}
+
+// --- Notification routing ----------------------------------------------
+
+export function listDepartmentChannels(): Promise<DepartmentChannelOut[]> {
+  return keelFetch(`/notifications/departments`);
 }
 
 export type {

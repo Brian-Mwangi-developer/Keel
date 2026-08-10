@@ -117,6 +117,7 @@ export interface OwnerOut {
   type: "user" | "group";
   avatar_url: string | null;
   description: string | null;
+  email: string | null;
 }
 
 export interface HistoryPointOut {
@@ -329,4 +330,37 @@ export interface ResolveOut {
   detected_at?: number;
   resolved_at?: number;
   resolution_seconds?: number;
+}
+
+export interface InjectScenarioOut {
+  id: string;
+  label: string;
+  description: string;
+  asset_urn: string;
+  column: string;
+}
+
+export interface InjectResultOut {
+  scenario_id: string;
+  asset_urn: string;
+  assertion_urn: string;
+  applied: boolean;
+}
+
+export interface DepartmentChannelOut {
+  id: string;
+  department: string;
+  domain_urn: string | null;
+  slack_channel_id: string;
+}
+
+export interface NotifyDepartmentResultOut {
+  department: string;
+  sent: boolean;
+  channel: string | null;
+  reason: string | null;
+}
+
+export interface NotifyDepartmentsOut {
+  results: NotifyDepartmentResultOut[];
 }

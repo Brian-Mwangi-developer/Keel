@@ -7,8 +7,11 @@ import { auth } from "@/lib/auth";
 import { urnPath } from "./client";
 import type {
   ConnectSourceIn,
+  DepartmentChannelOut,
   EditAndCheckOut,
+  InjectResultOut,
   InvestigateOut,
+  NotifyDepartmentsOut,
   NotifyOwnersOut,
   Operator,
   ResolveOut,
@@ -255,4 +258,37 @@ export async function removeSeverityRuleAction(id: string) {
   await requireSession();
   await postJson(`/severity-policy/${encodeURIComponent(id)}`, undefined, "DELETE");
   revalidatePath(`/settings/severity-policy`);
+}
+
+// --- Demo scenarios -----------------------------------------------------
+
+export async function injectScenarioAction(scenarioId: string): Promise<InjectResultOut> {
+  await requireSession();
+  const result = await postJson<InjectResultOut>(`/demo/inject/${encodeURIComponent(scenarioId)}`);
+  revalidatePath(`/dashboard`);
+  return result;
+}
+
+// --- Notification routing ------------------------------------------------
+
+export async function notifyDepartmentsAction(urn: string, reason?: string): Promise<NotifyDepartmentsOut> {
+  await requireSession();
+  return postJson<NotifyDepartmentsOut>(`/assets/${urnPath(urn)}/notify-departments`, { reason: reason || null });
+}
+
+export async function addDepartmentChannelAction(input: {
+  department: string;
+  domain_urn?: string | null;
+  slack_channel_id: string;
+}): Promise<DepartmentChannelOut> {
+  await requireSession();
+  const channel = await postJson<DepartmentChannelOut>(`/notifications/departments`, input);
+  revalidatePath(`/settings/notification-routing`);
+  return channel;
+}
+
+export async function removeDepartmentChannelAction(id: string) {
+  await requireSession();
+  await postJson(`/notifications/departments/${encodeURIComponent(id)}`, undefined, "DELETE");
+  revalidatePath(`/settings/notification-routing`);
 }

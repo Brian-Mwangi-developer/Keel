@@ -6,7 +6,16 @@
 // env access, and no point opening the backend to the public internet for
 // this). Read-only, same as client.ts -- mutations always go through
 // Server Actions in actions.ts.
-import type { FeedEventOut, IncidentRecord, LineageOut, OwnerOut, PipelineOverviewOut, QuickViewOut } from "./types";
+import type {
+  DepartmentChannelOut,
+  FeedEventOut,
+  IncidentRecord,
+  InjectScenarioOut,
+  LineageOut,
+  OwnerOut,
+  PipelineOverviewOut,
+  QuickViewOut,
+} from "./types";
 
 async function keelClientFetch<T>(path: string): Promise<T> {
   const res = await fetch(`/api/keel${path}`, { cache: "no-store" });
@@ -43,4 +52,12 @@ export function listIncidentsLive(): Promise<IncidentRecord[]> {
 
 export function getLineageLive(urn: string): Promise<LineageOut> {
   return keelClientFetch(`/assets/${encodeURIComponent(urn)}/lineage?direction=both`);
+}
+
+export function listInjectScenariosLive(): Promise<InjectScenarioOut[]> {
+  return keelClientFetch(`/demo/scenarios`);
+}
+
+export function listDepartmentChannelsLive(): Promise<DepartmentChannelOut[]> {
+  return keelClientFetch(`/notifications/departments`);
 }
