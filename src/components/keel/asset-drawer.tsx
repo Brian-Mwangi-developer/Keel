@@ -4,6 +4,7 @@ import {
   ExternalLink,
   Flag,
   Info,
+  Megaphone,
   Sparkles,
   Unplug,
   UserCheck,
@@ -39,6 +40,7 @@ import {
 import {
   bulkFlagUnsafeAction,
   investigateAction,
+  notifyDepartmentsAction,
   notifyOwnersAction,
 } from "@/lib/keel/actions";
 import { getQuickView } from "@/lib/keel/client-fetch";
@@ -482,6 +484,41 @@ export function AssetDrawer({
                 >
                   <UserCheck className="size-3.5" />
                   Alert owners
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={pending}
+                  onClick={() =>
+                    startTransition(async () => {
+                      try {
+                        const result = await notifyDepartmentsAction(
+                          data.asset.urn,
+                          `${data.asset.name} is scoring ${data.asset.score} (${data.asset.verdict}).`,
+                        );
+                        const sent = result.results.filter((r) => r.sent);
+                        if (result.results.length === 0) {
+                          toast.info("No department is configured for this asset yet — set one up in Notification routing.");
+                        } else if (sent.length === result.results.length) {
+                          toast.success(`Notified: ${sent.map((r) => r.department).join(", ")}.`);
+                        } else if (sent.length > 0) {
+                          toast.info(
+                            `Sent to ${sent.map((r) => r.department).join(", ")}; failed for ${result.results
+                              .filter((r) => !r.sent)
+                              .map((r) => r.department)
+                              .join(", ")}.`,
+                          );
+                        } else {
+                          toast.error(result.results[0]?.reason || "Failed to notify departments.");
+                        }
+                      } catch (e) {
+                        toast.error(e instanceof Error ? e.message : "Failed to notify departments.");
+                      }
+                    })
+                  }
+                >
+                  <Megaphone className="size-3.5" />
+                  Notify departments
                 </Button>
                 <Button
                   variant="ghost"

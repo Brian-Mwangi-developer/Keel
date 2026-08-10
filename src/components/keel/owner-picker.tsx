@@ -107,8 +107,8 @@ export function OwnerPicker({
                   </Avatar>
                   <span className="flex min-w-0 flex-1 flex-col">
                     <span className="truncate">{owner.display_name}</span>
-                    {owner.description && (
-                      <span className="truncate text-xs text-muted-foreground">{owner.description}</span>
+                    {(owner.email || owner.description) && (
+                      <span className="truncate text-xs text-muted-foreground">{owner.email || owner.description}</span>
                     )}
                   </span>
                   <Check className={cn("size-3.5", value?.urn === owner.urn ? "opacity-100" : "opacity-0")} />
