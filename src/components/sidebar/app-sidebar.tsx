@@ -7,6 +7,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import {
+  Bell,
   Bot,
   Database,
   LibraryBig,
@@ -73,6 +74,11 @@ const navSecondary = [
     title: "Severity policy",
     url: "/settings/severity-policy",
     icon: ShieldAlert,
+  },
+  {
+    title: "Notification routing",
+    url: "/settings/notification-routing",
+    icon: Bell,
   },
   {
     title: "Settings",
