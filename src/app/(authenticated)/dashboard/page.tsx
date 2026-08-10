@@ -1,5 +1,6 @@
 import { getFeed, getLineage, getPipelineOverview } from "@/lib/keel/client";
-import { LiveDashboard } from "@/components/keel/live-dashboard";
+import { EmptyDashboardGate } from "@/components/keel/empty-dashboard-gate";
+import { InjectScenarioDialog } from "@/components/keel/inject-scenario-dialog";
 import { ResetDemoButton } from "@/components/keel/reset-demo-button";
 
 export default async function DashboardPage(props: PageProps<"/dashboard">) {
@@ -13,11 +14,16 @@ export default async function DashboardPage(props: PageProps<"/dashboard">) {
   ]);
 
   return (
-    <LiveDashboard
+    <EmptyDashboardGate
       initialOverview={overview}
       initialLineage={lineage}
       initialFeed={feed}
-      resetSlot={<ResetDemoButton key="reset-demo" />}
+      resetSlot={
+        <div key="demo-actions" className="flex items-center gap-2">
+          <InjectScenarioDialog />
+          <ResetDemoButton />
+        </div>
+      }
     />
   );
 }
