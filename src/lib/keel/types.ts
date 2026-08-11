@@ -271,7 +271,8 @@ export type IncidentStatus =
   | "investigating"
   | "pending_human_approval"
   | "resolved"
-  | "denied";
+  | "denied"
+  | "fixed";
 
 export interface ActionResultOut {
   action: string;
@@ -306,6 +307,23 @@ export interface IncidentRecord {
   recommended_actions?: string[];
   target_urns?: string[];
   notify_team_name?: string | null;
+  // Set once POST /agent/incidents/{id}/mark-fixed has been clicked --
+  // separate from resolved_by/approved_by above, which only ever mean
+  // "a human approved the notify actions," not "the data is actually
+  // fixed." See MarkFixedButton.
+  fixed_by?: string;
+  fixed_at?: number;
+  unflagged?: boolean;
+  assertions_repassed?: string[];
+}
+
+export interface MarkFixedOut {
+  incident_id: string;
+  status: "fixed";
+  actor: string;
+  unflagged: boolean;
+  assertions_repassed: string[];
+  fixed_at: number;
 }
 
 export interface InvestigateOut {

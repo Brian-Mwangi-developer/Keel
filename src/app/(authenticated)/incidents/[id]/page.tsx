@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUpRight, History } from "lucide-react";
 import { getIncident, KeelApiError } from "@/lib/keel/client";
 import { formatIso, shortUrn, SEVERITY_STYLES } from "@/lib/keel/format";
 import { IncidentDecision } from "@/components/keel/incident-decision";
+import { MarkFixedButton } from "@/components/keel/mark-fixed-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { SeverityLevel } from "@/lib/keel/types";
@@ -47,19 +48,57 @@ export default async function IncidentDetailPage(props: PageProps<"/incidents/[i
 
       {incident.status === "pending_human_approval" && <IncidentDecision incidentId={incident.incident_id} />}
 
-      {incident.status === "resolved" && (
+      {(incident.status === "resolved" || incident.status === "fixed") && (
         <Card className="border-success/40 bg-success/5">
-          <CardContent className="flex flex-col gap-1 text-sm">
-            <span className="font-medium text-success">
-              Resolved by {incident.approved_by} · {incident.resolved_at && formatIso(new Date(incident.resolved_at * 1000).toISOString())}
-            </span>
-            <div className="mt-2 flex flex-col gap-1">
-              {incident.actions?.map((a, i) => (
-                <span key={i} className="font-mono text-xs text-muted-foreground">
-                  {a.action} on {shortUrn(a.urn)} — {a.detail}
-                </span>
-              ))}
+          <CardHeader className="flex flex-row items-start justify-between gap-3">
+            <div>
+              <CardTitle className="text-success">
+                Approved by {incident.approved_by} · {incident.resolved_at && formatIso(new Date(incident.resolved_at * 1000).toISOString())}
+              </CardTitle>
+              <CardDescription>
+                What actually happened when this was approved — notifications only. The underlying data problem is
+                separate; see below.
+              </CardDescription>
             </div>
+            {incident.status === "resolved" && <MarkFixedButton incidentId={incident.incident_id} />}
+          </CardHeader>
+          <CardContent className="flex flex-col gap-2">
+            {incident.actions?.map((a, i) => (
+              <div key={i} className="flex items-start gap-2 rounded-md border bg-background/60 p-2.5 text-sm">
+                <Badge
+                  variant={a.applied ? "default" : "outline"}
+                  className={`shrink-0 capitalize ${a.applied ? "bg-success text-success-foreground" : "text-muted-foreground"}`}
+                >
+                  {a.applied ? "sent" : "not sent"}
+                </Badge>
+                <div className="flex flex-col gap-0.5">
+                  <span className="font-medium capitalize">
+                    {a.action.replace(/_/g, " ")} <span className="font-normal text-muted-foreground">on {shortUrn(a.urn)}</span>
+                  </span>
+                  <span className="text-xs whitespace-pre-line text-muted-foreground">{a.detail}</span>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+      {incident.status === "fixed" && (
+        <Card className="border-primary/40 bg-primary/5">
+          <CardHeader>
+            <CardTitle className="text-primary">
+              Marked fixed by {incident.fixed_by} · {incident.fixed_at && formatIso(new Date(incident.fixed_at * 1000).toISOString())}
+            </CardTitle>
+            <CardDescription>A human confirmed the data problem is actually resolved.</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-1 text-sm text-muted-foreground">
+            {incident.unflagged && <span>Deprecation flag cleared on {shortUrn(incident.root_urn)}.</span>}
+            {incident.assertions_repassed && incident.assertions_repassed.length > 0 && (
+              <span>{incident.assertions_repassed.length} failing check(s) re-passed — trust recovering upstream-first.</span>
+            )}
+            {!incident.unflagged && (!incident.assertions_repassed || incident.assertions_repassed.length === 0) && (
+              <span>No open flag or failing check was found to clear.</span>
+            )}
           </CardContent>
         </Card>
       )}

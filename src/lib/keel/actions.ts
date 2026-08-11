@@ -11,6 +11,7 @@ import type {
   EditAndCheckOut,
   InjectResultOut,
   InvestigateOut,
+  MarkFixedOut,
   NotifyDepartmentsOut,
   NotifyOwnersOut,
   Operator,
@@ -220,6 +221,22 @@ export async function denyIncidentAction(incidentId: string): Promise<ResolveOut
   });
   revalidatePath(`/incidents`);
   revalidatePath(`/incidents/${encodeURIComponent(incidentId)}`);
+  return result;
+}
+
+export async function markIncidentFixedAction(incidentId: string): Promise<MarkFixedOut> {
+  // Separate from approve above -- approve only ever notifies. This is the
+  // explicit action that actually clears the root cause in DataHub
+  // (unflags + re-passes the failing assertion), so it gets its own
+  // button, not folded into approve.
+  const session = await requireSession();
+  const approver = session.user.name || session.user.email || "unknown";
+  const result = await postJson<MarkFixedOut>(`/agent/incidents/${encodeURIComponent(incidentId)}/mark-fixed`, {
+    approver,
+  });
+  revalidatePath(`/incidents`);
+  revalidatePath(`/incidents/${encodeURIComponent(incidentId)}`);
+  revalidatePath(`/dashboard`);
   return result;
 }
 

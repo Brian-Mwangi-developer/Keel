@@ -58,8 +58,10 @@ export default async function IncidentsPage() {
 function StatusBadge({ status }: { status: IncidentStatus }) {
   const variant =
     status === "resolved" ? "secondary" : status === "pending_human_approval" ? "default" : "outline";
+  const className =
+    status === "fixed" ? "bg-success text-success-foreground capitalize" : "capitalize";
   return (
-    <Badge variant={variant} className="capitalize">
+    <Badge variant={variant} className={className}>
       {status.replace(/_/g, " ")}
     </Badge>
   );
